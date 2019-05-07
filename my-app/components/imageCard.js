@@ -12,7 +12,7 @@ const ImageCard = ({ data, onPress }) => {
         <TouchableOpacity onPress={onPress}>
             <View style={container} key={id}>
                 <View style={sub}>
-                    <Image style={img} source={{uri: image}}  />
+                    <Image style={img} source={{uri: image.medium ? image.medium : ''}}  />
                 </View>
                 <Text style={h1}>{ name.toUpperCase() }</Text>
             </View>
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         fontSize: 18,
         alignSelf: 'center',
+        backgroundColor: 'white',
         textAlign: 'center'
     },
     img: {

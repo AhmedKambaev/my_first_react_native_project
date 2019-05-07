@@ -1,6 +1,7 @@
 
 import { createStackNavigator } from 'react-navigation'
 import HomeScreen from './pages/home'
+
 import DetailsScreen from './pages/details'
 
 const AppNavigator = createStackNavigator(

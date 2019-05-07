@@ -8,14 +8,14 @@ const h = win.height
 class DetailsScreen extends PureComponent {
 
     render() {
-        const { image, name, info } = this.props.navigation.state.params
+        const { image, name, summary } = this.props.navigation.state.params
         return(
             <View style={styles.container}>
                 <ScrollView style={styles.bgWhite}>
                     <View style={styles.sub}>
-                        <Image style={styles.img} source={{uri: image}}  />
+                        <Image style={styles.img} source={{uri: image.medium}}  />
                         <Text style={styles.h1}>{name.toUpperCase()}</Text>
-                        <Text style={styles.parag}>{info.replace(/<[^>]+>/g, '')}</Text>
+                        <Text style={styles.parag}>{summary.replace(/<[^>]+>/g, '')}</Text>
                     </View>
                 </ScrollView>
             </View>
@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     h1: {
         fontSize: 24,
         padding: 15,
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: 'white'
     },
     parag: {
         fontSize: 15,
