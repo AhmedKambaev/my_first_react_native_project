@@ -1,20 +1,22 @@
 import React from 'react'
-import { Text, View, Image, StyleSheet, Dimensions } from 'react-native'
+import { Text, View, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
 
 const win = Dimensions.get('window')
 const w = win.width
 const h = win.height
 
-const ImageCard = ({ data }) => {
+const ImageCard = ({ data, onPress }) => {
     const { h1, img, container, sub } = styles
     const { id, name, image } = data
     return(
-        <View style={container} key={id}>
-            <View style={sub}>
-                <Image style={img} source={{uri: image}}  />
+        <TouchableOpacity onPress={onPress}>
+            <View style={container} key={id}>
+                <View style={sub}>
+                    <Image style={img} source={{uri: image}}  />
+                </View>
+                <Text style={h1}>{ name.toUpperCase() }</Text>
             </View>
-            <Text style={h1}>{ name.toUpperCase() }</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -22,6 +24,7 @@ const ImageCard = ({ data }) => {
 const styles = StyleSheet.create({
     container: {
         width: w / 2.4,
+        backgroundColor: 'white',
         paddingVertical: 10
     },
     sub: {

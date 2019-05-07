@@ -16,7 +16,6 @@ const Modal = ({isModalVisible, _toggleModal}) => {
 }
 
 
-
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'rgba(0,0,0,0.4)',
