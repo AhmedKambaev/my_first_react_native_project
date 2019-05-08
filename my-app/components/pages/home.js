@@ -4,8 +4,9 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { Button } from 'react-native-elements'
 import ImageCard from '../imageCard'
 import { SearchBar } from 'react-native-elements'
+import { connect } from 'react-redux'
 import { STARGATE_DETAILS } from '../router'
-
+import { searchChange, getMovies } from '../actions'
 
 
 const win = Dimensions.get('window')
@@ -15,99 +16,68 @@ const h = win.height
 const url = 'https://api.tvmaze.com/search/shows'
 const stargate = '?q=stargate'
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
     state = {
       isModalVisible: false,
       loading: true,
-      search: '',
-      error: false,
-      data: []
     }
 
     updateSearch = search => {
-      this.setState({ search });
-    }
+      this.props.searchChange(search);
+      this.props.getMovies(search);
+    } 
 
-    onSubmitSearch = async () => {
-      if(this.state.search !== '') {
-        const response = await fetch(url+"?q="+this.state.search)
-        const data = await response.json()
-        if(data)
-          this.setState({data: data, loading: false, noSearch: false, error: false})
-        else this.setState({noSearch: true, loading: false, error: false})
-      }
+    clearSearch = () => {
+      this.props.getMovies('stargate')
+      console.log('sds')
     }
 
     componentDidMount = async() => {
       const response = await fetch(url+stargate)
       const data = await response.json()
-      if(data)
-          this.setState({data: data, loading: false, noSearch: false, error: false})
-      else this.setState({noSearch: true, loading: false, error: false})
+      if(data){
+        this.props.getMovies('stargate')
+        this.setState({loading: false})
+      }
+        
+      else this.setState({loading: false})
     }
 
     componentDidCatch = (error, info) => {
-      this.setState({
-        error: true,
-        data: [],
-        loading: false
-      })
+      console.log('error')
     }
-
-    _toggleModal = (status) =>
-        this.setState({ isModalVisible: status })
 
 
     render() {
-      const { data } = this.state
-      const { navigation } = this.props
-      const { search } = this.state
-
-      if(this.state.loading) {
-        return (
-           <View style={styles.loading_container}>
-             <Text style={styles.loading_text}>Loading..</Text>
-           </View> 
-        )
-      }
-
-      if(this.state.noSearch) {
-        return(
-          <View style={styles.loading_container}>
-            <Text style={styles.loading_text}>Ничего не найдено!</Text>
-          </View>
-        )
-      }
+      const { navigation, movie, data } = this.props
 
       if(this.state.error) {
         return(
           <View style={styles.loading_container}>
+            <Icon name="window-close-o" size={30} color="tomato" />
             <Text style={styles.loading_text}>Упс! Произошла ошибка</Text>
           </View>
         )
       }
 
+      if(this.state.loading) {
+        return (
+           <View style={styles.loading_container}>
+             <Icon name="rocket" size={30} color="tomato" />
+             <Text style={styles.loading_text}>Loading..</Text>
+           </View> 
+        )
+      }
+
       return (
         <View style={styles.application_container}>
-          <View style={styles.header}>
-            <View style={{flex: 2, justifyContent: 'space-between'}}>
+          <View>
               <SearchBar
                 placeholder="Type Here..."
                 onChangeText={this.updateSearch}
-                value={search}
+                value={movie}
+                onClear={this.clearSearch}
               />
-            </View>
-            <Button
-                onPress={this.onSubmitSearch}
-                buttonStyle={{flex: 1, padding: 20, height: w*0.14, alignItems: 'center', justifyContent: 'center', backgroundColor: '#292929', borderRadius: 0}}
-                icon={
-                  <Icon
-                    name="search"
-                    size={20}
-                    color="white"
-                  />
-                }
-            />
           </View>
           <ScrollView>
             <View style={styles.container_data}>
@@ -135,19 +105,27 @@ const styles = StyleSheet.create({
   application_container: {
     backgroundColor: 'white'
   },
-  header: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-  },  
   loading_container: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
-    height: w
+    backgroundColor: '#017dad',
+    height: h
   },
   loading_text: {
     fontSize: 25,
-    backgroundColor: 'white',
+    backgroundColor: '#017dad',
+    color: 'white'
   }
 })
+
+
+const mapStateToProps = (state) => {
+  return {
+    movie: state.search.movie,
+    data: state.search.data
+  }
+}
+
+
+export default connect(mapStateToProps, {searchChange, getMovies})(HomeScreen) 

@@ -9,11 +9,12 @@ class DetailsScreen extends PureComponent {
 
     render() {
         const { image, name, summary } = this.props.navigation.state.params
+        const imageCard = image === null ? 'https://fcrmedia.ie/wp-content/themes/fcr/assets/images/default.jpg' : `https${image.medium.slice(4)}`;
         return(
             <View style={styles.container}>
                 <ScrollView style={styles.bgWhite}>
                     <View style={styles.sub}>
-                        <Image style={styles.img} source={{uri: image.medium}}  />
+                        <Image style={styles.img} source={{uri: imageCard}}  />
                         <Text style={styles.h1}>{name.toUpperCase()}</Text>
                         <Text style={styles.parag}>{summary.replace(/<[^>]+>/g, '')}</Text>
                     </View>

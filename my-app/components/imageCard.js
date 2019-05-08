@@ -8,11 +8,12 @@ const h = win.height
 const ImageCard = ({ data, onPress }) => {
     const { h1, img, container, sub } = styles
     const { id, name, image } = data
+    const imageCard = image === null ? 'https://fcrmedia.ie/wp-content/themes/fcr/assets/images/default.jpg' : `https${image.medium.slice(4)}`;
     return(
         <TouchableOpacity onPress={onPress}>
             <View style={container} key={id}>
                 <View style={sub}>
-                    <Image style={img} source={{uri: image.medium ? image.medium : ''}}  />
+                    <Image style={img} source={{uri: imageCard}}  />
                 </View>
                 <Text style={h1}>{ name.toUpperCase() }</Text>
             </View>
